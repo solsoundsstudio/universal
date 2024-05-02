@@ -5,6 +5,8 @@ plugins {
     id("kotlinx-serialization")
     id("com.android.library")
     id("com.google.devtools.ksp")
+    id("com.rickclephas.kmp.nativecoroutines")
+    id("io.github.luca992.multiplatform-swiftpackage") version "2.2.1"
 }
 
 android {
@@ -20,8 +22,16 @@ android {
 kotlin {
     jvmToolchain(17)
 
+    listOf(
+        macosArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "UniversalNetworkKit"
+        }
+    }
+
     androidTarget()
-    jvm {
+    jvm() {
         mainRun {
             mainClass = "com.jaybobzin.universal.common.MainKt"
         }
@@ -54,5 +64,25 @@ kotlin {
             implementation(libs.ktor.client.java)
             implementation(libs.slf4j)
         }
+
+        appleMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
     }
 }
+
+multiplatformSwiftPackage {
+    packageName("UniversalNetwork")
+    swiftToolsVersion("5.9")
+    targetPlatforms {
+        iOS { v("14") }
+        macOS { v("14")}
+    }
+    outputDirectory(File(projectDir, "../../x/.generated/UniversalNetworkPackage"))
+}
+
+
+kotlin.sourceSets.all {
+    languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+}
+

@@ -1,10 +1,18 @@
 /**
- * Open in Android Studio for Android App support
+ * Open in IntelliJ for birds eye view but limited capabilities.
  */
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("g/gradle/libs.versions.toml"))
+        }
+    }
+}
 
-apply("plugins.gradle.kts")
+apply("g/plugins.gradle.kts")
 
-rootProject.name = "UniversalNetwork"
+rootProject.name = "UniversalRoot"
 
-include(":app")
-include(":common")
+include(":g")
+include(":g:common")
+
