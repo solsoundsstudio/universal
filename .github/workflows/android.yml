@@ -16,7 +16,9 @@ jobs:
         java-version: 17
 
     - name: Build android app
+      working-directory: "g"
       run: ./gradlew :app:assembleDebug
 
     - name: Run Unit Tests
+      working-directory: "g"
       run: ./gradlew :app:test
